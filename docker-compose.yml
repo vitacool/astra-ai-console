@@ -1,0 +1,38 @@
+services:
+  astra:
+    build: .
+    container_name: astra-console
+    ports:
+      - "8787:8787"
+    environment:
+      NODE_ENV: production
+      JWT_SECRET: ${JWT_SECRET:-change-this-jwt-secret-before-production}
+      APP_SECRET: ${APP_SECRET:-change-this-encryption-secret-before-production}
+      PORT: 8787
+      VECTOR_DATABASE_URL: postgres://astra:astra@vector-db:5432/astra
+    volumes:
+      - astra-data:/app/data
+    depends_on:
+      vector-db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  vector-db:
+    image: pgvector/pgvector:pg17
+    container_name: astra-vector-db
+    environment:
+      POSTGRES_USER: astra
+      POSTGRES_PASSWORD: astra
+      POSTGRES_DB: astra
+    volumes:
+      - astra-vectors:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U astra -d astra"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    restart: unless-stopped
+
+volumes:
+  astra-data:
+  astra-vectors:

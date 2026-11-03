@@ -1,0 +1,9 @@
+node_modules
+apps/*/dist
+data
+.npm-cache
+.tmp
+.git
+.env
+docs/screenshots
+*.log

@@ -1,0 +1,26 @@
+{
+  "name": "astra-ai-console",
+  "version": "1.1.0",
+  "private": true,
+  "description": "星枢 ASTRA — 企业级 AI 管理控制台",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n API,WEB -c cyan,green \"npm:dev:server\" \"npm:dev:web\"",
+    "dev:server": "npm --workspace @astra/server run dev",
+    "dev:web": "npm --workspace @astra/web run dev",
+    "build": "npm --workspace @astra/web run build && npm --workspace @astra/server run build",
+    "start": "npm --workspace @astra/server run start",
+    "test": "npm --workspace @astra/server run test",
+    "typecheck": "npm --workspace @astra/server run typecheck && npm --workspace @astra/web run typecheck",
+    "db:reset": "npm --workspace @astra/server run db:reset",
+    "capture": "node scripts/capture.mjs"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}
